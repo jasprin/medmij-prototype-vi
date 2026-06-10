@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Syringe, ShieldCheck, Lock } from "lucide-react";
+import { Syringe, ShieldCheck, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { patient } from "@/data/vaccinations";
 
@@ -54,55 +54,26 @@ function LoginPage() {
         </section>
 
         <section aria-labelledby="login-heading" className="rounded-2xl border border-border bg-card p-6 shadow-lg sm:p-8">
-          <h2 id="login-heading" className="text-xl font-semibold">Inloggen met DigiD</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Demo-omgeving — gebruik onderstaande knop om als testpatiënt {patient.name} in te loggen.
+          <h2 id="login-heading" className="text-xl font-semibold">Bekijk de demo</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Dit is een niet-functioneel prototype. Je gaat door als testpatiënt
+            <span className="font-medium text-foreground"> {patient.name}</span> (BSN {patient.bsn}, Scenario 1.1 Nictiz kwalificatiescript).
           </p>
-          <form
-            className="mt-6 space-y-4"
-            onSubmit={(e) => {
-              e.preventDefault();
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => {
               setLoading(true);
-              setTimeout(() => navigate({ to: "/dashboard" }), 350);
+              setTimeout(() => navigate({ to: "/dashboard" }), 250);
             }}
+            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-70"
           >
-            <div>
-              <label htmlFor="bsn" className="mb-1 block text-sm font-medium">BSN</label>
-              <input
-                id="bsn"
-                name="bsn"
-                type="text"
-                inputMode="numeric"
-                defaultValue={patient.bsn}
-                className="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:border-ring"
-                aria-describedby="bsn-help"
-              />
-              <p id="bsn-help" className="mt-1 text-xs text-muted-foreground">
-                Testpatiënt 999900390 (Scenario 1.1 Nictiz kwalificatiescript).
-              </p>
-            </div>
-            <div>
-              <label htmlFor="code" className="mb-1 block text-sm font-medium">Code</label>
-              <input
-                id="code"
-                name="code"
-                type="password"
-                defaultValue="••••••"
-                className="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:border-ring"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-70"
-            >
-              <Lock className="h-4 w-4" aria-hidden />
-              {loading ? "Een moment…" : "Inloggen (demo)"}
-            </button>
-            <p className="text-center text-xs text-muted-foreground">
-              Geen echte authenticatie. Alleen voor UX-validatie.
-            </p>
-          </form>
+            {loading ? "Een moment…" : "Doorgaan naar mijn PGO"}
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </button>
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            Geen echte authenticatie. Alleen voor UX-validatie.
+          </p>
         </section>
       </main>
     </div>
