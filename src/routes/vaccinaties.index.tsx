@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ListTree, GanttChartSquare, Filter, CheckCircle2, XCircle, Building2 } from "lucide-react";
+import { ListTree, GanttChartSquare, Filter, CheckCircle2, XCircle, Building2, ArrowUpDown } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import {
   vaccinations,
@@ -10,8 +10,18 @@ import {
   getDiseases,
   type Vaccination,
 } from "@/data/vaccinations";
+import { z } from "zod";
+
+const searchSchema = z.object({
+  view: z.enum(["groups", "timeline"]).optional(),
+  year: z.string().optional(),
+  disease: z.string().optional(),
+  status: z.enum(["all", "completed", "not-done"]).optional(),
+  sort: z.enum(["desc", "asc"]).optional(),
+});
 
 export const Route = createFileRoute("/vaccinaties/")({
+  validateSearch: searchSchema,
   head: () => ({
     meta: [
       { title: "Vaccinaties — Beeld+ PGO" },
@@ -24,24 +34,43 @@ export const Route = createFileRoute("/vaccinaties/")({
 });
 
 type View = "groups" | "timeline";
+type Sort = "desc" | "asc";
 
 function VaccinationOverview() {
-  const [view, setView] = useState<View>("groups");
-  const [year, setYear] = useState<string>("all");
-  const [disease, setDisease] = useState<string>("all");
-  const [status, setStatus] = useState<string>("all");
+  const search = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
+  const view: View = search.view ?? "groups";
+  const year = search.year ?? "all";
+  const disease = search.disease ?? "all";
+  const status = search.status ?? "all";
+  const sort: Sort = search.sort ?? "desc";
+
+  const update = (patch: Record<string, string | undefined>) =>
+    navigate({
+      search: (prev: Record<string, string | undefined>) => {
+        const next = { ...prev, ...patch } as Record<string, string | undefined>;
+        for (const k of Object.keys(next)) if (next[k] === "all" || next[k] === undefined) delete next[k];
+        return next;
+      },
+      replace: true,
+    });
 
   const years = useMemo(() => getYears(vaccinations), []);
   const diseases = useMemo(() => getDiseases(vaccinations), []);
 
   const filtered = useMemo(() => {
-    return vaccinations.filter((v) => {
+    const list = vaccinations.filter((v) => {
       if (year !== "all" && !v.occurrenceDate.startsWith(year)) return false;
       if (disease !== "all" && v.targetDisease !== disease) return false;
       if (status !== "all" && v.status !== status) return false;
       return true;
     });
-  }, [year, disease, status]);
+    return [...list].sort((a, b) =>
+      sort === "desc"
+        ? b.occurrenceDate.localeCompare(a.occurrenceDate)
+        : a.occurrenceDate.localeCompare(b.occurrenceDate),
+    );
+  }, [year, disease, status, sort]);
 
   const groups = useMemo(() => groupByDisease(filtered), [filtered]);
 
@@ -57,10 +86,10 @@ function VaccinationOverview() {
           </p>
         </div>
         <div role="tablist" aria-label="Weergave" className="inline-flex rounded-md border border-border bg-background p-1">
-          <ViewToggle current={view} value="groups" onChange={setView} icon={<ListTree className="h-4 w-4" />}>
+          <ViewToggle current={view} value="groups" onChange={(v) => update({ view: v })} icon={<ListTree className="h-4 w-4" />}>
             Per ziekte
           </ViewToggle>
-          <ViewToggle current={view} value="timeline" onChange={setView} icon={<GanttChartSquare className="h-4 w-4" />}>
+          <ViewToggle current={view} value="timeline" onChange={(v) => update({ view: v })} icon={<GanttChartSquare className="h-4 w-4" />}>
             Tijdlijn
           </ViewToggle>
         </div>
@@ -68,28 +97,39 @@ function VaccinationOverview() {
 
       <section
         aria-label="Filters"
-        className="mb-6 grid gap-3 rounded-xl border border-border bg-card p-4 sm:grid-cols-[auto_1fr_1fr_1fr]"
+        className="mb-6 grid gap-3 rounded-xl border border-border bg-card p-4 sm:grid-cols-[auto_1fr_1fr_1fr_auto]"
       >
         <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
           <Filter className="h-4 w-4" aria-hidden /> Filteren
         </div>
-        <FilterSelect label="Jaar" value={year} onChange={setYear}>
+        <FilterSelect label="Jaar" value={year} onChange={(v) => update({ year: v })}>
           <option value="all">Alle jaren</option>
           {years.map((y) => (
             <option key={y} value={String(y)}>{y}</option>
           ))}
         </FilterSelect>
-        <FilterSelect label="Ziekte" value={disease} onChange={setDisease}>
+        <FilterSelect label="Ziekte" value={disease} onChange={(v) => update({ disease: v })}>
           <option value="all">Alle ziekten</option>
           {diseases.map((d) => (
             <option key={d} value={d}>{d}</option>
           ))}
         </FilterSelect>
-        <FilterSelect label="Status" value={status} onChange={setStatus}>
+        <FilterSelect label="Status" value={status} onChange={(v) => update({ status: v })}>
           <option value="all">Alle statussen</option>
           <option value="completed">Toegediend</option>
           <option value="not-done">Niet toegediend</option>
         </FilterSelect>
+        <div className="flex items-end">
+          <button
+            type="button"
+            onClick={() => update({ sort: sort === "desc" ? "asc" : "desc" })}
+            aria-label={`Sorteer op datum, nu ${sort === "desc" ? "nieuwste eerst" : "oudste eerst"}`}
+            className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-accent/15"
+          >
+            <ArrowUpDown className="h-4 w-4" aria-hidden />
+            {sort === "desc" ? "Nieuwste eerst" : "Oudste eerst"}
+          </button>
+        </div>
       </section>
 
       {filtered.length === 0 ? (
