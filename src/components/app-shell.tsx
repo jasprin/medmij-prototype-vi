@@ -32,12 +32,12 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
           <div className="flex items-center gap-3">
             <div className="hidden text-right sm:block">
               <div className="text-sm font-medium">{patient.name}</div>
-              <div className="text-xs text-muted-foreground">BSN {patient.bsn}</div>
+              <div className="text-xs text-muted-foreground">Geboortedatum {new Date(patient.birthDate).toLocaleDateString("nl-NL")}</div>
             </div>
             <Link
               to="/"
               aria-label="Uitloggen"
-              className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground hover:bg-accent/10"
+              className="inline-flex min-h-11 items-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground hover:bg-accent/10"
             >
               <LogOut className="h-4 w-4" aria-hidden />
               <span className="hidden sm:inline">Uitloggen</span>
@@ -45,7 +45,7 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
           </div>
         </div>
         <nav aria-label="Mobiele navigatie" className="border-t border-border md:hidden">
-          <div className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-2 py-2">
+          <div className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-2 py-2 [-webkit-overflow-scrolling:touch]">
             <NavItem to="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />}>Dashboard</NavItem>
             <NavItem to="/vaccinaties" icon={<Syringe className="h-4 w-4" />}>Vaccinaties</NavItem>
             <NavItem to="/bronnen" icon={<Building2 className="h-4 w-4" />}>Bronnen</NavItem>
@@ -53,8 +53,8 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
           </div>
         </nav>
       </header>
-      <main id="hoofdinhoud" className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-        {title ? <h1 className="mb-6 text-3xl font-semibold tracking-tight">{title}</h1> : null}
+      <main id="hoofdinhoud" className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+        {title ? <h1 className="mb-6 text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1> : null}
         {children}
       </main>
       <footer className="mt-16 border-t border-border bg-background">
@@ -76,7 +76,7 @@ function NavItem({ to, icon, children }: { to: string; icon: ReactNode; children
       to={to}
       activeProps={{ className: "bg-primary text-primary-foreground" }}
       inactiveProps={{ className: "text-foreground hover:bg-accent/15" }}
-      className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors"
+      className="inline-flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium transition-colors"
     >
       <span aria-hidden>{icon}</span>
       {children}
