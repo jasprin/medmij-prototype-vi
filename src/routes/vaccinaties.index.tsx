@@ -8,6 +8,7 @@ import {
   formatDateNL,
   getYears,
   getDiseases,
+  vaccineDisplay,
   type Vaccination,
 } from "@/data/vaccinations";
 import { z } from "zod";
@@ -85,7 +86,7 @@ function VaccinationOverview() {
             FHIR IG Vaccination-Immunization 2.0.4.
           </p>
         </div>
-        <div role="tablist" aria-label="Weergave" className="inline-flex rounded-md border border-border bg-background p-1">
+        <div role="tablist" aria-label="Weergave" className="inline-flex w-full rounded-md border border-border bg-background p-1 sm:w-auto">
           <ViewToggle current={view} value="groups" onChange={(v) => update({ view: v })} icon={<ListTree className="h-4 w-4" />}>
             Per ziekte
           </ViewToggle>
@@ -124,7 +125,7 @@ function VaccinationOverview() {
             type="button"
             onClick={() => update({ sort: sort === "desc" ? "asc" : "desc" })}
             aria-label={`Sorteer op datum, nu ${sort === "desc" ? "nieuwste eerst" : "oudste eerst"}`}
-            className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-accent/15"
+            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-accent/15 sm:w-auto"
           >
             <ArrowUpDown className="h-4 w-4" aria-hidden />
             {sort === "desc" ? "Nieuwste eerst" : "Oudste eerst"}
@@ -214,7 +215,7 @@ function ViewToggle({
       aria-selected={selected}
       onClick={() => onChange(value)}
       className={
-        "inline-flex items-center gap-2 rounded px-3 py-1.5 text-sm font-medium transition-colors " +
+        "inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded px-3 py-1.5 text-sm font-medium transition-colors sm:flex-initial " +
         (selected ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-accent/15")
       }
     >
@@ -240,15 +241,17 @@ function StatusBadge({ status }: { status: Vaccination["status"] }) {
 }
 
 function VaccinationRow({ v }: { v: Vaccination }) {
+  const name = v.product?.name ?? vaccineDisplay(v.vaccineCode);
   return (
     <Link
       to="/vaccinaties/$id"
       params={{ id: v.id }}
-      className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 transition-colors hover:bg-accent/10"
+      aria-label={`Details van ${name} (${v.targetDisease}) op ${formatDateNL(v.occurrenceDate)}`}
+      className="flex min-h-16 flex-wrap items-center justify-between gap-3 px-4 py-4 transition-colors hover:bg-accent/10 sm:px-5"
     >
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="font-medium">{v.product?.name ?? v.vaccineCode.display}</span>
+          <span className="font-medium">{name}</span>
           <StatusBadge status={v.status} />
           {v.doseNumber && v.seriesDoses ? (
             <span className="rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
@@ -263,7 +266,7 @@ function VaccinationRow({ v }: { v: Vaccination }) {
           <Building2 className="h-3.5 w-3.5" aria-hidden /> Bron: {v.organization.name}
         </p>
       </div>
-      <span aria-hidden className="text-sm text-primary">Details →</span>
+      <span aria-hidden className="shrink-0 text-sm font-medium text-primary">Details →</span>
     </Link>
   );
 }
@@ -292,9 +295,14 @@ function Timeline({ items }: { items: Vaccination[] }) {
               <ul className="mt-3 space-y-3">
                 {list.map((v) => (
                   <li key={v.id} className="rounded-lg border border-border bg-card p-4">
-                    <Link to="/vaccinaties/$id" params={{ id: v.id }} className="block">
+                    <Link
+                      to="/vaccinaties/$id"
+                      params={{ id: v.id }}
+                      aria-label={`Details van ${v.product?.name ?? vaccineDisplay(v.vaccineCode)} (${v.targetDisease}) op ${formatDateNL(v.occurrenceDate)}`}
+                      className="block"
+                    >
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <div className="font-medium">{v.product?.name ?? v.vaccineCode.display}</div>
+                        <div className="font-medium">{v.product?.name ?? vaccineDisplay(v.vaccineCode)}</div>
                         <StatusBadge status={v.status} />
                       </div>
                       <p className="mt-1 text-sm text-muted-foreground">
