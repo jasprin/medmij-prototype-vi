@@ -3,7 +3,7 @@ import { Syringe, LayoutDashboard, Building2, Shield, LogOut } from "lucide-reac
 import type { ReactNode } from "react";
 import { patient } from "@/data/vaccinations";
 
-export function AppShell({ children, title }: { children: ReactNode; title?: string }) {
+export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-muted/40">
       <a
@@ -54,7 +54,6 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
         </nav>
       </header>
       <main id="hoofdinhoud" tabIndex={-1} className="mx-auto max-w-6xl px-4 py-6 outline-none sm:px-6 sm:py-8">
-        {title ? <h1 className="mb-6 text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1> : null}
         {children}
       </main>
       <footer className="mt-16 border-t border-border bg-background">
