@@ -22,7 +22,8 @@ function fmt(iso: string) {
 
 function BronnenPage() {
   return (
-    <AppShell title="Aangesloten zorgaanbieders">
+    <AppShell>
+      <h1 className="mb-2 text-2xl font-semibold tracking-tight sm:text-3xl">Aangesloten zorgaanbieders</h1>
       <p className="mb-6 max-w-2xl text-sm text-muted-foreground">
         Hieronder zie je welke zorgaanbieders volgens het MedMij afsprakenstelsel
         gegevens leveren aan jouw PGO. Per bron kun je het aantal gedeelde vaccinaties
@@ -57,7 +58,7 @@ function BronnenPage() {
               </dl>
               <button
                 type="button"
-                className="mt-4 inline-flex items-center gap-1 rounded-md border border-border bg-background px-3 py-1.5 text-sm hover:bg-accent/15"
+                className="mt-4 inline-flex min-h-11 items-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-sm hover:bg-accent/15"
               >
                 <RefreshCw className="h-3.5 w-3.5" aria-hidden /> Vernieuwen
               </button>
