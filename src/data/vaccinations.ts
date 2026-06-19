@@ -46,7 +46,6 @@ export type Vaccination = {
 };
 
 export const patient = {
-  bsn: "999900390",
   name: "Sanne Boekwijt",
   gender: "vrouw",
   birthDate: "2007-04-18",
@@ -257,7 +256,7 @@ export const vaccinations: Vaccination[] = [
     status: "not-done",
     statusReason: "Geweigerd door patiënt",
     occurrenceDate: "2024-10-15",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836398006", display: "Griepvaccin (influenza, seizoen 2024-2025)" },
+    vaccineCode: { system: "http://snomed.info/sct", code: "1252708008", display: "vaccin tegen influenzavirus (seizoen 2024-2025)" },
     targetDisease: "Influenza",
     series: "Najaarsronde griep 2024",
     performer: { name: "Dr. R. el Amrani", role: "Huisarts" },
