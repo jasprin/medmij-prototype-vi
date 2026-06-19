@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useRouter, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Building2, Calendar, MapPin, Syringe, User, AlertCircle, FileText } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { vaccinations, formatDateNL } from "@/data/vaccinations";
+import { vaccinations, formatDateNL, vaccineDisplay } from "@/data/vaccinations";
 
 export const Route = createFileRoute("/vaccinaties/$id")({
   loader: ({ params }) => {
@@ -11,7 +11,7 @@ export const Route = createFileRoute("/vaccinaties/$id")({
   },
   head: ({ loaderData }) => ({
     meta: [
-      { title: `${loaderData?.item.product?.name ?? loaderData?.item.vaccineCode.display ?? "Vaccinatie"} — Beeld+ PGO` },
+      { title: `${loaderData?.item.product?.name ?? (loaderData ? vaccineDisplay(loaderData.item.vaccineCode) : "Vaccinatie")} — Beeld+ PGO` },
       { name: "description", content: "Detailweergave van een vaccinatie volgens FHIR IG Vaccination-Immunization 2.0.4." },
     ],
   }),
@@ -58,7 +58,7 @@ function VaccinationDetail() {
       <header className="rounded-2xl border border-border bg-card p-6">
         <p className="text-sm font-medium uppercase tracking-wide text-secondary">{v.targetDisease}</p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">
-          {v.product?.name ?? v.vaccineCode.display}
+          {v.product?.name ?? vaccineDisplay(v.vaccineCode)}
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {formatDateNL(v.occurrenceDate)}
@@ -81,8 +81,12 @@ function VaccinationDetail() {
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <Card icon={<Syringe />} title="Vaccin">
-          <Row label="Vaccinnaam">{v.vaccineCode.display}</Row>
-          <Row label="SNOMED CT">{v.vaccineCode.code}</Row>
+          <Row label="Vaccinnaam">{vaccineDisplay(v.vaccineCode)}</Row>
+          {v.vaccineCode.coding.map((c: { system: string; code: string; display: string }) => (
+            <Row key={`${c.system}-${c.code}`} label={c.system.includes("snomed") ? "SNOMED CT" : "Code"}>
+              {c.code}
+            </Row>
+          ))}
           {v.product ? (
             <>
               <Row label="Product">{v.product.name}</Row>
@@ -154,9 +158,9 @@ function Card({ icon, title, wide, children }: { icon: React.ReactNode; title: s
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="grid grid-cols-[140px_1fr] gap-2">
-      <dt className="text-muted-foreground">{label}</dt>
-      <dd className="font-medium">{children}</dd>
+    <div className="grid gap-0.5 sm:grid-cols-[140px_1fr] sm:gap-2">
+      <dt className="text-xs text-muted-foreground sm:text-sm">{label}</dt>
+      <dd className="font-medium break-words">{children}</dd>
     </div>
   );
 }
