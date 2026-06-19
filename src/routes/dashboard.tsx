@@ -95,7 +95,8 @@ function Dashboard() {
 function PlaceholderTile({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
     <div
-      aria-disabled
+      role="group"
+      aria-label={`${title} — binnenkort beschikbaar`}
       className="flex items-start gap-3 rounded-xl border border-dashed border-border bg-card p-5 text-muted-foreground"
     >
       <span aria-hidden className="grid h-10 w-10 place-items-center rounded-lg bg-muted text-foreground/60">
