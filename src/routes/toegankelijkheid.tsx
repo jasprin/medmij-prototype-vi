@@ -15,7 +15,8 @@ export const Route = createFileRoute("/toegankelijkheid")({
 
 function A11yPage() {
   return (
-    <AppShell title="Toegankelijkheidsverklaring">
+    <AppShell>
+      <h1 className="mb-6 text-2xl font-semibold tracking-tight sm:text-3xl">Toegankelijkheidsverklaring</h1>
       <div className="max-w-3xl space-y-6 text-sm leading-relaxed">
         <p>
           Dit prototype streeft naar conformiteit met{" "}
