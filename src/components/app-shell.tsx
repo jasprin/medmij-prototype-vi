@@ -53,7 +53,7 @@ export function AppShell({ children, title }: { children: ReactNode; title?: str
           </div>
         </nav>
       </header>
-      <main id="hoofdinhoud" className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+      <main id="hoofdinhoud" tabIndex={-1} className="mx-auto max-w-6xl px-4 py-6 outline-none sm:px-6 sm:py-8">
         {title ? <h1 className="mb-6 text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1> : null}
         {children}
       </main>
@@ -74,7 +74,7 @@ function NavItem({ to, icon, children }: { to: string; icon: ReactNode; children
   return (
     <Link
       to={to}
-      activeProps={{ className: "bg-primary text-primary-foreground" }}
+      activeProps={{ className: "bg-primary text-primary-foreground", "aria-current": "page" }}
       inactiveProps={{ className: "text-foreground hover:bg-accent/15" }}
       className="inline-flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium transition-colors"
     >
