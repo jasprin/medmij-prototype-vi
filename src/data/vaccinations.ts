@@ -10,10 +10,15 @@ export type Vaccination = {
   status: VaccinationStatus;
   statusReason?: string;
   occurrenceDate: string; // ISO YYYY-MM-DD
+  // FHIR CodeableConcept — een coderingsconcept kan meerdere codings hebben
+  // (bv. SNOMED CT én G-Standaard) plus een vrije-tekst weergave.
   vaccineCode: {
-    system: string;
-    code: string;
-    display: string;
+    coding: Array<{
+      system: string;
+      code: string;
+      display: string;
+    }>;
+    text?: string;
   };
   targetDisease: string; // ziekte/groep — voor groepering in overzicht
   product?: {
@@ -78,7 +83,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-001",
     status: "completed",
     occurrenceDate: "2007-06-25",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836500008", display: "vaccin tegen difterie + kinkhoest + tetanus + poliomyelitis + Haemophilus influenzae type b + hepatitis B (DKTP-Hib-HepB)" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836500008", display: "vaccin tegen difterie + kinkhoest + tetanus + poliomyelitis + Haemophilus influenzae type b + hepatitis B (DKTP-Hib-HepB)" }], text: "vaccin tegen difterie + kinkhoest + tetanus + poliomyelitis + Haemophilus influenzae type b + hepatitis B (DKTP-Hib-HepB)" },
     targetDisease: "DKTP-Hib-HepB",
     product: { name: "Infanrix hexa", manufacturer: "GlaxoSmithKline", lotNumber: "A21CB175A" },
     doseNumber: 1, seriesDoses: 4, series: "Rijksvaccinatieprogramma",
@@ -91,7 +96,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-002",
     status: "completed",
     occurrenceDate: "2007-08-20",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836500008", display: "DKTP-Hib-HepB" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836500008", display: "DKTP-Hib-HepB" }], text: "DKTP-Hib-HepB" },
     targetDisease: "DKTP-Hib-HepB",
     product: { name: "Infanrix hexa", manufacturer: "GlaxoSmithKline", lotNumber: "A21CB182A" },
     doseNumber: 2, seriesDoses: 4, series: "Rijksvaccinatieprogramma",
@@ -104,7 +109,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-003",
     status: "completed",
     occurrenceDate: "2007-10-15",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836500008", display: "DKTP-Hib-HepB" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836500008", display: "DKTP-Hib-HepB" }], text: "DKTP-Hib-HepB" },
     targetDisease: "DKTP-Hib-HepB",
     product: { name: "Infanrix hexa", manufacturer: "GlaxoSmithKline", lotNumber: "A21CB190A" },
     doseNumber: 3, seriesDoses: 4, series: "Rijksvaccinatieprogramma",
@@ -117,7 +122,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-004",
     status: "completed",
     occurrenceDate: "2008-04-22",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836500008", display: "DKTP-Hib-HepB" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836500008", display: "DKTP-Hib-HepB" }], text: "DKTP-Hib-HepB" },
     targetDisease: "DKTP-Hib-HepB",
     product: { name: "Infanrix hexa", manufacturer: "GlaxoSmithKline", lotNumber: "A22CB011A" },
     doseNumber: 4, seriesDoses: 4, series: "Rijksvaccinatieprogramma",
@@ -130,7 +135,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-005",
     status: "completed",
     occurrenceDate: "2008-06-18",
-    vaccineCode: { system: "http://snomed.info/sct", code: "871866001", display: "vaccin tegen bof + mazelen + rodehond (BMR)" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "871866001", display: "vaccin tegen bof + mazelen + rodehond (BMR)" }], text: "vaccin tegen bof + mazelen + rodehond (BMR)" },
     targetDisease: "BMR",
     product: { name: "M-M-RVAXPRO", manufacturer: "MSD", lotNumber: "M020734" },
     doseNumber: 1, seriesDoses: 2, series: "Rijksvaccinatieprogramma",
@@ -143,7 +148,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-006",
     status: "completed",
     occurrenceDate: "2008-06-18",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836383005", display: "vaccin tegen meningokokken serogroep C" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836383005", display: "vaccin tegen meningokokken serogroep C" }], text: "vaccin tegen meningokokken serogroep C" },
     targetDisease: "MenC",
     product: { name: "NeisVac-C", manufacturer: "Pfizer", lotNumber: "MC0814" },
     doseNumber: 1, seriesDoses: 1, series: "Rijksvaccinatieprogramma",
@@ -157,7 +162,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-007",
     status: "completed",
     occurrenceDate: "2011-04-12",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836398006", display: "vaccin tegen difterie + kinkhoest + tetanus + poliomyelitis (DKTP)" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836398006", display: "vaccin tegen difterie + kinkhoest + tetanus + poliomyelitis (DKTP)" }], text: "vaccin tegen difterie + kinkhoest + tetanus + poliomyelitis (DKTP)" },
     targetDisease: "DKTP",
     product: { name: "Boostrix-Polio", manufacturer: "GlaxoSmithKline", lotNumber: "AC52B097AA" },
     doseNumber: 5, seriesDoses: 5, series: "Rijksvaccinatieprogramma — 4 jaar",
@@ -171,7 +176,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-008",
     status: "completed",
     occurrenceDate: "2016-09-05",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836379007", display: "vaccin tegen difterie + tetanus + poliomyelitis (DTP)" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836379007", display: "vaccin tegen difterie + tetanus + poliomyelitis (DTP)" }], text: "vaccin tegen difterie + tetanus + poliomyelitis (DTP)" },
     targetDisease: "DTP",
     product: { name: "Revaxis", manufacturer: "Sanofi", lotNumber: "J1A091V" },
     doseNumber: 6, seriesDoses: 6, series: "Rijksvaccinatieprogramma — 9 jaar",
@@ -184,7 +189,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-009",
     status: "completed",
     occurrenceDate: "2016-09-05",
-    vaccineCode: { system: "http://snomed.info/sct", code: "871866001", display: "BMR" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "871866001", display: "BMR" }], text: "BMR" },
     targetDisease: "BMR",
     product: { name: "M-M-RVAXPRO", manufacturer: "MSD", lotNumber: "M042881" },
     doseNumber: 2, seriesDoses: 2, series: "Rijksvaccinatieprogramma — 9 jaar",
@@ -198,7 +203,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-010",
     status: "completed",
     occurrenceDate: "2019-09-10",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836379009", display: "vaccin met antigeen van humaan papillomavirus" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836379009", display: "vaccin met antigeen van humaan papillomavirus" }], text: "vaccin met antigeen van humaan papillomavirus" },
     targetDisease: "HPV",
     product: { name: "Cervarix", manufacturer: "GlaxoSmithKline", lotNumber: "AHPVA064BB" },
     doseNumber: 1, seriesDoses: 2, series: "Rijksvaccinatieprogramma — HPV",
@@ -211,7 +216,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-011",
     status: "completed",
     occurrenceDate: "2020-03-04",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836379009", display: "vaccin met antigeen van humaan papillomavirus" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836379009", display: "vaccin met antigeen van humaan papillomavirus" }], text: "vaccin met antigeen van humaan papillomavirus" },
     targetDisease: "HPV",
     product: { name: "Cervarix", manufacturer: "GlaxoSmithKline", lotNumber: "AHPVA071CC" },
     doseNumber: 2, seriesDoses: 2, series: "Rijksvaccinatieprogramma — HPV",
@@ -226,7 +231,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-012",
     status: "completed",
     occurrenceDate: "2022-06-30",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836401000", display: "vaccin met antigeen van hepatitis A-virus" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836401000", display: "vaccin met antigeen van hepatitis A-virus" }], text: "vaccin met antigeen van hepatitis A-virus" },
     targetDisease: "Hepatitis A",
     product: { name: "Havrix Junior 720", manufacturer: "GlaxoSmithKline", lotNumber: "AHAVB145" },
     doseNumber: 1, seriesDoses: 2, series: "Reizigersvaccinatie",
@@ -241,7 +246,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-013",
     status: "completed",
     occurrenceDate: "2023-10-02",
-    vaccineCode: { system: "http://snomed.info/sct", code: "28531000087107", display: "vaccin tegen 'Severe acute respiratory syndrome'-coronavirus 2" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "28531000087107", display: "vaccin tegen 'Severe acute respiratory syndrome'-coronavirus 2" }], text: "vaccin tegen 'Severe acute respiratory syndrome'-coronavirus 2" },
     targetDisease: "COVID-19",
     product: { name: "COVID-19 VACCIN PFIZER INJVLST 0,3 ML", manufacturer: "Pfizer/BioNTech", lotNumber: "FF4213" },
     doseNumber: 1, seriesDoses: 1, series: "Najaarsronde 2023",
@@ -256,7 +261,7 @@ export const vaccinations: Vaccination[] = [
     status: "not-done",
     statusReason: "Geweigerd door patiënt",
     occurrenceDate: "2024-10-15",
-    vaccineCode: { system: "http://snomed.info/sct", code: "1252708008", display: "vaccin tegen influenzavirus (seizoen 2024-2025)" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "1252708008", display: "vaccin tegen influenzavirus (seizoen 2024-2025)" }], text: "vaccin tegen influenzavirus (seizoen 2024-2025)" },
     targetDisease: "Influenza",
     series: "Najaarsronde griep 2024",
     performer: { name: "Dr. R. el Amrani", role: "Huisarts" },
@@ -268,7 +273,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-015",
     status: "completed",
     occurrenceDate: "2025-07-21",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836382000", display: "vaccin tegen tetanus" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836382000", display: "vaccin tegen tetanus" }], text: "vaccin tegen tetanus" },
     targetDisease: "Tetanus",
     product: { name: "Tetavax", manufacturer: "Sanofi", lotNumber: "T2J119" },
     series: "Wondbehandeling",
@@ -283,7 +288,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-016",
     status: "completed",
     occurrenceDate: "2023-01-12",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836401000", display: "vaccin met antigeen van hepatitis A-virus" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836401000", display: "vaccin met antigeen van hepatitis A-virus" }], text: "vaccin met antigeen van hepatitis A-virus" },
     targetDisease: "Hepatitis A",
     product: { name: "Havrix 1440", manufacturer: "GlaxoSmithKline", lotNumber: "AHAVB212" },
     doseNumber: 2, seriesDoses: 2, series: "Reizigersvaccinatie",
@@ -298,7 +303,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-017",
     status: "completed",
     occurrenceDate: "2024-05-14",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836379007", display: "vaccin tegen difterie + tetanus + poliomyelitis (DTP)" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836379007", display: "vaccin tegen difterie + tetanus + poliomyelitis (DTP)" }], text: "vaccin tegen difterie + tetanus + poliomyelitis (DTP)" },
     targetDisease: "DTP",
     product: { name: "Revaxis", manufacturer: "Sanofi", lotNumber: "K2C047V" },
     series: "Reizigersvaccinatie — booster",
@@ -313,7 +318,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-018",
     status: "completed",
     occurrenceDate: "2024-05-14",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836382008", display: "vaccin met antigeen van gelekoortsvirus" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836382008", display: "vaccin met antigeen van gelekoortsvirus" }], text: "vaccin met antigeen van gelekoortsvirus" },
     targetDisease: "Gele koorts",
     product: { name: "Stamaril", manufacturer: "Sanofi Pasteur", lotNumber: "YF1J083" },
     doseNumber: 1, seriesDoses: 1, series: "Reizigersvaccinatie",
@@ -328,7 +333,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-019",
     status: "completed",
     occurrenceDate: "2024-05-28",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836403002", display: "vaccin met antigeen van Salmonella typhi" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836403002", display: "vaccin met antigeen van Salmonella typhi" }], text: "vaccin met antigeen van Salmonella typhi" },
     targetDisease: "Buiktyfus",
     product: { name: "Typhim Vi", manufacturer: "Sanofi Pasteur", lotNumber: "TY4H218" },
     doseNumber: 1, seriesDoses: 1, series: "Reizigersvaccinatie",
@@ -343,7 +348,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-020",
     status: "completed",
     occurrenceDate: "2025-02-03",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836404008", display: "vaccin met antigeen van rabiësvirus" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836404008", display: "vaccin met antigeen van rabiësvirus" }], text: "vaccin met antigeen van rabiësvirus" },
     targetDisease: "Rabiës",
     product: { name: "Rabipur", manufacturer: "Bavarian Nordic", lotNumber: "RB5A011" },
     doseNumber: 1, seriesDoses: 3, series: "Reizigersvaccinatie — pre-expositie",
@@ -357,7 +362,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-021",
     status: "completed",
     occurrenceDate: "2025-02-10",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836404008", display: "vaccin met antigeen van rabiësvirus" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836404008", display: "vaccin met antigeen van rabiësvirus" }], text: "vaccin met antigeen van rabiësvirus" },
     targetDisease: "Rabiës",
     product: { name: "Rabipur", manufacturer: "Bavarian Nordic", lotNumber: "RB5A011" },
     doseNumber: 2, seriesDoses: 3, series: "Reizigersvaccinatie — pre-expositie",
@@ -370,7 +375,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-022",
     status: "completed",
     occurrenceDate: "2025-03-03",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836404008", display: "vaccin met antigeen van rabiësvirus" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836404008", display: "vaccin met antigeen van rabiësvirus" }], text: "vaccin met antigeen van rabiësvirus" },
     targetDisease: "Rabiës",
     product: { name: "Rabipur", manufacturer: "Bavarian Nordic", lotNumber: "RB5A019" },
     doseNumber: 3, seriesDoses: 3, series: "Reizigersvaccinatie — pre-expositie",
@@ -385,7 +390,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-023",
     status: "completed",
     occurrenceDate: "2025-03-10",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836405009", display: "vaccin met antigeen van Japanse-encefalitisvirus" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836405009", display: "vaccin met antigeen van Japanse-encefalitisvirus" }], text: "vaccin met antigeen van Japanse-encefalitisvirus" },
     targetDisease: "Japanse encefalitis",
     product: { name: "Ixiaro", manufacturer: "Valneva", lotNumber: "JE5C204" },
     doseNumber: 1, seriesDoses: 2, series: "Reizigersvaccinatie",
@@ -398,7 +403,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-024",
     status: "completed",
     occurrenceDate: "2025-03-31",
-    vaccineCode: { system: "http://snomed.info/sct", code: "836405009", display: "vaccin met antigeen van Japanse-encefalitisvirus" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836405009", display: "vaccin met antigeen van Japanse-encefalitisvirus" }], text: "vaccin met antigeen van Japanse-encefalitisvirus" },
     targetDisease: "Japanse encefalitis",
     product: { name: "Ixiaro", manufacturer: "Valneva", lotNumber: "JE5C211" },
     doseNumber: 2, seriesDoses: 2, series: "Reizigersvaccinatie",
@@ -448,4 +453,12 @@ export function getYears(items: Vaccination[]): number[] {
 
 export function getDiseases(items: Vaccination[]): string[] {
   return [...new Set(items.map((v) => v.targetDisease))].sort();
+}
+
+/** FHIR CodeableConcept helpers — leesbare weergave + primaire coding. */
+export function vaccineDisplay(c: Vaccination["vaccineCode"]): string {
+  return c.text ?? c.coding[0]?.display ?? "Onbekend vaccin";
+}
+export function vaccinePrimaryCoding(c: Vaccination["vaccineCode"]) {
+  return c.coding[0];
 }
