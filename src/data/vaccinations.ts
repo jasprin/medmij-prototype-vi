@@ -245,11 +245,11 @@ export const vaccinations: Vaccination[] = [
   {
     id: "imm-013",
     status: "completed",
-    occurrenceDate: "2023-10-02",
+    occurrenceDate: "2021-07-15",
     vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "28531000087107", display: "vaccin tegen 'Severe acute respiratory syndrome'-coronavirus 2" }], text: "vaccin tegen 'Severe acute respiratory syndrome'-coronavirus 2" },
     targetDisease: "COVID-19",
     product: { name: "COVID-19 VACCIN PFIZER INJVLST 0,3 ML", manufacturer: "Pfizer/BioNTech", lotNumber: "FF4213" },
-    doseNumber: 1, seriesDoses: 1, series: "Najaarsronde 2023",
+    doseNumber: 1, seriesDoses: 2, series: "Basisserie 2021",
     site: "bovenarm links", route: "intramusculair", doseQuantity: "0,3 ml",
     performer: { name: "K. Vermeer", role: "Verpleegkundig specialist" },
     organization: { id: "ggd-amsterdam", name: "GGD Amsterdam — Vaccinatieteam", type: "GGD" },
