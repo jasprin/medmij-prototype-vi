@@ -49,7 +49,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <NavItem to="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />}>Dashboard</NavItem>
             <NavItem to="/vaccinaties" icon={<Syringe className="h-4 w-4" />}>Vaccinaties</NavItem>
             <NavItem to="/bronnen" icon={<Building2 className="h-4 w-4" />}>Bronnen</NavItem>
-            <NavItem to="/toegankelijkheid" icon={<Shield className="h-4 w-4" />}>WCAG</NavItem>
+            <NavItem to="/toegankelijkheid" icon={<Shield className="h-4 w-4" />}>Toegankelijkheid</NavItem>
           </div>
         </nav>
       </header>

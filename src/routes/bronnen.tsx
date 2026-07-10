@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Building2, RefreshCw, ShieldCheck } from "lucide-react";
+import { Building2, RefreshCw, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { useState } from "react";
 import { AppShell } from "@/components/app-shell";
 import { sources, vaccinations } from "@/data/vaccinations";
 
@@ -21,6 +22,17 @@ function fmt(iso: string) {
 }
 
 function BronnenPage() {
+  const [syncing, setSyncing] = useState<string | null>(null);
+  const [syncedAt, setSyncedAt] = useState<Record<string, string>>({});
+
+  const handleRefresh = (id: string) => {
+    setSyncing(id);
+    setTimeout(() => {
+      setSyncedAt((prev) => ({ ...prev, [id]: new Date().toISOString() }));
+      setSyncing(null);
+    }, 900);
+  };
+
   return (
     <AppShell>
       <h1 className="mb-2 text-2xl font-semibold tracking-tight sm:text-3xl">Aangesloten zorgaanbieders</h1>
@@ -32,6 +44,9 @@ function BronnenPage() {
       <ul className="grid gap-4 md:grid-cols-2">
         {sources.map((s) => {
           const count = vaccinations.filter((v) => v.organization.id === s.id).length;
+          const isSyncing = syncing === s.id;
+          const lastSync = syncedAt[s.id] ?? s.lastSync;
+          const justSynced = Boolean(syncedAt[s.id]) && !isSyncing;
           return (
             <li key={s.id} className="rounded-xl border border-border bg-card p-5">
               <div className="flex items-start gap-3">
@@ -53,15 +68,28 @@ function BronnenPage() {
                 </div>
                 <div>
                   <dt className="text-xs text-muted-foreground">Laatste sync</dt>
-                  <dd className="font-medium">{fmt(s.lastSync)}</dd>
+                  <dd className="font-medium">{fmt(lastSync)}</dd>
                 </div>
               </dl>
-              <button
-                type="button"
-                className="mt-4 inline-flex min-h-11 items-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-sm hover:bg-accent/15"
-              >
-                <RefreshCw className="h-3.5 w-3.5" aria-hidden /> Vernieuwen
-              </button>
+              <div className="mt-4 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => handleRefresh(s.id)}
+                  disabled={isSyncing}
+                  aria-label={`Vernieuw gegevens van ${s.name}`}
+                  className="inline-flex min-h-11 items-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-sm hover:bg-accent/15 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <RefreshCw className={`h-3.5 w-3.5 ${isSyncing ? "animate-spin" : ""}`} aria-hidden />
+                  {isSyncing ? "Bezig met synchroniseren…" : "Vernieuwen"}
+                </button>
+                <span aria-live="polite" className="text-xs text-muted-foreground">
+                  {justSynced ? (
+                    <span className="inline-flex items-center gap-1 text-secondary-foreground">
+                      <CheckCircle2 className="h-3.5 w-3.5" aria-hidden /> Bijgewerkt
+                    </span>
+                  ) : null}
+                </span>
+              </div>
             </li>
           );
         })}

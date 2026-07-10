@@ -255,6 +255,20 @@ export const vaccinations: Vaccination[] = [
     organization: { id: "ggd-amsterdam", name: "GGD Amsterdam — Vaccinatieteam", type: "GGD" },
     primarySource: true,
   },
+  {
+    id: "imm-013b",
+    status: "completed",
+    occurrenceDate: "2021-08-05",
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "28531000087107", display: "vaccin tegen 'Severe acute respiratory syndrome'-coronavirus 2" }], text: "vaccin tegen 'Severe acute respiratory syndrome'-coronavirus 2" },
+    targetDisease: "COVID-19",
+    product: { name: "COVID-19 VACCIN PFIZER INJVLST 0,3 ML", manufacturer: "Pfizer/BioNTech", lotNumber: "FH8020" },
+    doseNumber: 2, seriesDoses: 2, series: "Basisserie 2021",
+    site: "bovenarm links", route: "intramusculair", doseQuantity: "0,3 ml",
+    performer: { name: "K. Vermeer", role: "Verpleegkundig specialist" },
+    organization: { id: "ggd-amsterdam", name: "GGD Amsterdam — Vaccinatieteam", type: "GGD" },
+    note: "Afsluitende dosis basisserie; ~3 weken interval.",
+    primarySource: true,
+  },
   // ===== Niet toegediend — geweigerd =====
   {
     id: "imm-014",
@@ -290,9 +304,9 @@ export const vaccinations: Vaccination[] = [
     occurrenceDate: "2023-01-12",
     vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836401000", display: "vaccin met antigeen van hepatitis A-virus" }], text: "vaccin met antigeen van hepatitis A-virus" },
     targetDisease: "Hepatitis A",
-    product: { name: "Havrix 1440", manufacturer: "GlaxoSmithKline", lotNumber: "AHAVB212" },
+    product: { name: "Havrix Junior 720", manufacturer: "GlaxoSmithKline", lotNumber: "AHAVB212" },
     doseNumber: 2, seriesDoses: 2, series: "Reizigersvaccinatie",
-    site: "bovenarm rechts", route: "intramusculair", doseQuantity: "1,0 ml",
+    site: "bovenarm rechts", route: "intramusculair", doseQuantity: "0,5 ml",
     performer: { name: "K. Vermeer", role: "Verpleegkundig specialist" },
     organization: { id: "ggd-amsterdam", name: "GGD Amsterdam — Vaccinatieteam", type: "GGD" },
     note: "Afsluitende dosis ~6 maanden na 1e dosis; langdurige bescherming.",
@@ -364,7 +378,7 @@ export const vaccinations: Vaccination[] = [
     occurrenceDate: "2025-02-10",
     vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836404008", display: "vaccin met antigeen van rabiësvirus" }], text: "vaccin met antigeen van rabiësvirus" },
     targetDisease: "Rabiës",
-    product: { name: "Rabipur", manufacturer: "Bavarian Nordic", lotNumber: "RB5A011" },
+    product: { name: "Rabipur", manufacturer: "Bavarian Nordic", lotNumber: "RB5A014" },
     doseNumber: 2, seriesDoses: 3, series: "Reizigersvaccinatie — pre-expositie",
     site: "bovenarm rechts", route: "intramusculair", doseQuantity: "1,0 ml",
     performer: { name: "K. Vermeer", role: "Verpleegkundig specialist" },
@@ -441,10 +455,17 @@ export function groupByDisease(items: Vaccination[]): VaccinationGroup[] {
     .sort((a, b) => b.lastDate.localeCompare(a.lastDate));
 }
 
-export function formatDateNL(iso: string): string {
-  const [y, m, d] = iso.split("-");
+export function formatDateNL(iso: string | null | undefined): string {
+  if (!iso || typeof iso !== "string") return "—";
+  const datePart = iso.slice(0, 10);
+  const parts = datePart.split("-");
+  if (parts.length !== 3) return "—";
+  const [y, m, d] = parts;
+  const mi = parseInt(m, 10);
+  const di = parseInt(d, 10);
   const months = ["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"];
-  return `${parseInt(d, 10)} ${months[parseInt(m, 10) - 1]} ${y}`;
+  if (!y || Number.isNaN(mi) || Number.isNaN(di) || mi < 1 || mi > 12) return "—";
+  return `${di} ${months[mi - 1]} ${y}`;
 }
 
 export function getYears(items: Vaccination[]): number[] {

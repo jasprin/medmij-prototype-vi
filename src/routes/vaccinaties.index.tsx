@@ -285,9 +285,8 @@ function VaccinationRow({ v }: { v: Vaccination }) {
 }
 
 function Timeline({ items }: { items: Vaccination[] }) {
-  const sorted = [...items].sort((a, b) => b.occurrenceDate.localeCompare(a.occurrenceDate));
   const byYear = new Map<string, Vaccination[]>();
-  for (const v of sorted) {
+  for (const v of items) {
     const y = v.occurrenceDate.slice(0, 4);
     byYear.set(y, [...(byYear.get(y) ?? []), v]);
   }
