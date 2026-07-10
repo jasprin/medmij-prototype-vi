@@ -87,10 +87,10 @@ function VaccinationOverview() {
           </p>
         </div>
         <div role="tablist" aria-label="Weergave" className="inline-flex w-full rounded-md border border-border bg-background p-1 sm:w-auto">
-          <ViewToggle current={view} value="groups" onChange={(v) => update({ view: v })} icon={<ListTree className="h-4 w-4" />}>
+          <ViewToggle current={view} value="groups" onChange={(v) => update({ view: v })} icon={<ListTree className="h-4 w-4" />} id="tab-groups" controls="tabpanel-vaccinaties">
             Per ziekte
           </ViewToggle>
-          <ViewToggle current={view} value="timeline" onChange={(v) => update({ view: v })} icon={<GanttChartSquare className="h-4 w-4" />}>
+          <ViewToggle current={view} value="timeline" onChange={(v) => update({ view: v })} icon={<GanttChartSquare className="h-4 w-4" />} id="tab-timeline" controls="tabpanel-vaccinaties">
             Tijdlijn
           </ViewToggle>
         </div>
@@ -133,6 +133,12 @@ function VaccinationOverview() {
         </div>
       </section>
 
+      <div
+        role="tabpanel"
+        id="tabpanel-vaccinaties"
+        aria-labelledby={view === "groups" ? "tab-groups" : "tab-timeline"}
+        tabIndex={0}
+      >
       {filtered.length === 0 ? (
         <p className="rounded-md border border-dashed border-border bg-card p-6 text-center text-sm text-muted-foreground">
           Geen vaccinaties gevonden met de huidige filters.
@@ -164,6 +170,7 @@ function VaccinationOverview() {
       ) : (
         <Timeline items={filtered} />
       )}
+      </div>
     </AppShell>
   );
 }
@@ -201,17 +208,23 @@ function ViewToggle({
   onChange,
   icon,
   children,
+  id,
+  controls,
 }: {
   current: View;
   value: View;
   onChange: (v: View) => void;
   icon: React.ReactNode;
   children: React.ReactNode;
+  id?: string;
+  controls?: string;
 }) {
   const selected = current === value;
   return (
     <button
       role="tab"
+      id={id}
+      aria-controls={controls}
       aria-selected={selected}
       onClick={() => onChange(value)}
       className={

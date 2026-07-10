@@ -318,7 +318,7 @@ export const vaccinations: Vaccination[] = [
     id: "imm-018",
     status: "completed",
     occurrenceDate: "2024-05-14",
-    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836382008", display: "vaccin met antigeen van gelekoortsvirus" }], text: "vaccin met antigeen van gelekoortsvirus" },
+    vaccineCode: { coding: [{ system: "http://snomed.info/sct", code: "836385002", display: "vaccin met antigeen van gelekoortsvirus (Flaviviridae)" }], text: "vaccin met antigeen van gelekoortsvirus (Flaviviridae)" },
     targetDisease: "Gele koorts",
     product: { name: "Stamaril", manufacturer: "Sanofi Pasteur", lotNumber: "YF1J083" },
     doseNumber: 1, seriesDoses: 1, series: "Reizigersvaccinatie",
