@@ -186,7 +186,7 @@ function FilterSelect({
   onChange: (v: string) => void;
   children: React.ReactNode;
 }) {
-  const id = `f-${label.toLowerCase()}`;
+  const id = `f-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`;
   return (
     <div>
       <label htmlFor={id} className="mb-1 block text-xs font-medium text-muted-foreground">{label}</label>

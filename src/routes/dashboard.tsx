@@ -84,6 +84,9 @@ function Dashboard() {
             <li key={s.id} className="rounded-md border border-border bg-background p-3 text-sm">
               <div className="font-medium">{s.name}</div>
               <div className="mt-0.5 text-xs text-muted-foreground">{s.type}</div>
+              <div className="mt-1 text-xs text-muted-foreground">
+                Laatst bijgewerkt: {new Date(s.lastSync).toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })}
+              </div>
             </li>
           ))}
         </ul>

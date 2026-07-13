@@ -480,6 +480,3 @@ export function getDiseases(items: Vaccination[]): string[] {
 export function vaccineDisplay(c: Vaccination["vaccineCode"]): string {
   return c.text ?? c.coding[0]?.display ?? "Onbekend vaccin";
 }
-export function vaccinePrimaryCoding(c: Vaccination["vaccineCode"]) {
-  return c.coding[0];
-}

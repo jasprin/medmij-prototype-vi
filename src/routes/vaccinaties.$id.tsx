@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useRouter, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Building2, Calendar, MapPin, Syringe, User, AlertCircle, FileText } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { vaccinations, formatDateNL, vaccineDisplay } from "@/data/vaccinations";
+import { vaccinations, formatDateNL, vaccineDisplay, type Vaccination } from "@/data/vaccinations";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/vaccinaties/$id")({
-  loader: ({ params }) => {
+  loader: ({ params }): { item: Vaccination } => {
     const item = vaccinations.find((v) => v.id === params.id);
     if (!item) throw notFound();
     return { item };
@@ -34,10 +35,11 @@ function NotFound() {
 
 function ErrorBlock({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
+  if (typeof console !== "undefined") console.error(error);
   return (
     <AppShell>
       <h1 className="text-2xl font-semibold">Er ging iets mis</h1>
-      <p className="mt-2 text-muted-foreground">{error.message}</p>
+      <p className="mt-2 text-muted-foreground">Er is een onverwachte fout opgetreden. Probeer het opnieuw.</p>
       <button
         onClick={() => { router.invalidate(); reset(); }}
         className="mt-4 rounded-md bg-primary px-4 py-2 text-primary-foreground"
@@ -144,7 +146,7 @@ function VaccinationDetail() {
 
 function Card({ icon, title, wide, children }: { icon: React.ReactNode; title: string; wide?: boolean; children: React.ReactNode }) {
   return (
-    <section className={"rounded-xl border border-border bg-card p-5 " + (wide ? "sm:col-span-2" : "")}>
+    <section className={cn("rounded-xl border border-border bg-card p-5", wide && "sm:col-span-2")}>
       <header className="mb-3 flex items-center gap-2">
         <span aria-hidden className="grid h-8 w-8 place-items-center rounded-md bg-primary/10 text-primary">
           {icon}

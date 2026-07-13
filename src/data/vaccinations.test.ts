@@ -64,4 +64,23 @@ describe("vaccinations data helpers", () => {
       expect(v.vaccineCode.coding[0].system).toMatch(/snomed/);
     }
   });
+
+  it("formatDateNL geeft em-dash bij ongeldige of ontbrekende invoer", () => {
+    expect(formatDateNL("")).toBe("—");
+    expect(formatDateNL(null)).toBe("—");
+    expect(formatDateNL(undefined)).toBe("—");
+    expect(formatDateNL("niet-een-datum")).toBe("—");
+    expect(formatDateNL("2024-13-01")).toBe("—");
+  });
+
+  it("vaccineDisplay valt terug op placeholder bij lege coding zonder text", () => {
+    expect(vaccineDisplay({ coding: [] })).toBe("Onbekend vaccin");
+    expect(vaccineDisplay({ coding: [], text: "Handmatig" })).toBe("Handmatig");
+  });
+
+  it("groupByDisease / getYears / getDiseases werken op lege input", () => {
+    expect(groupByDisease([])).toEqual([]);
+    expect(getYears([])).toEqual([]);
+    expect(getDiseases([])).toEqual([]);
+  });
 });
